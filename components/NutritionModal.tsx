@@ -58,13 +58,13 @@ export default function NutritionModal({ isOpen, onClose, onSave, initialPrefere
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Favorite Dining Options
             </label>
-            <p className="text-xs text-gray-500 mb-1">Comma-separated (e.g., Resnik, Entropy, Cohon)</p>
+            <p className="text-xs text-gray-500 mb-1">Comma-separated (e.g., Entropy+, Au Bon Pain, The Exchange)</p>
             <textarea
               value={favoriteDining}
               onChange={(e) => setFavoriteDining(e.target.value)}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-              placeholder="Resnik, Entropy+"
+              placeholder="Entropy+, The Exchange"
             />
           </div>
 

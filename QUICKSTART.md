@@ -39,7 +39,7 @@ Use the included `sample-schedule.ics` file to test the app:
 
 ### Nutrition Goals
 - **Meals Per Day**: 3
-- **Favorite Dining**: Resnik, Entropy+
+- **Favorite Dining**: Entropy+, The Exchange
 - **No-Go Dining**: (leave empty)
 
 ### Fitness Goals

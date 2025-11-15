@@ -68,7 +68,7 @@ npm start
 1. Click "Set Nutrition Goals"
 2. Configure:
    - **Meals Per Day**: Number of meals you want (1-5)
-   - **Favorite Dining Options**: Comma-separated list (e.g., "Resnik, Entropy+, Cohon")
+   - **Favorite Dining Options**: Comma-separated list (e.g., "Entropy+, Au Bon Pain, The Exchange")
    - **No-Go Dining Options**: Places you want to avoid
 3. Default meal times:
    - Breakfast: 8:00 AM - 10:00 AM
@@ -153,17 +153,45 @@ cmuclaudehackathon2025/
 
 ## CMU Dining Locations
 
-The app includes pre-configured CMU dining locations:
-- Resnik Cafe
+The app includes 36 official CMU dining locations with accurate operating hours from CMU Eats:
+- Stephanie's - Market C (24/7)
+- Scotty's Market By Salem's
+- Stack'd Underground
+- Stack'd Dessert Bar
+- The Grill At Scotty's
+- Salem's Hot Bar
+- Au Bon Pain At Skibo Café
+- El Gallo De Oro
 - Entropy+
-- Cohon University Center
+- Revolution Noodle
+- Millie's Coffee 'n' Creamery
+- Rohr Café - La Prima
+- De Fer Coffee & Tea
+- Nourish
+- Capital Grains
 - The Exchange
-- Tepper Cafe
-- The Underground
-- Maggie Murph Cafe
-- Rothberg's Roasters II
+- Schatz Dining Room
+- Taste Of India
+- Hunan Express
+- The Edge Cafe & Market
+- Sweet Plantain
+- Fire And Stone
+- Tahini
+- Zebra Lounge
+- La Prima Espresso (Wean Hall)
+- Redhawk Coffee
+- Ola Ola
+- Ciao Bella
+- Shake Smart
+- Crisp And Crust
+- Rohr Commons - Tepper Eatery
+- Wild Blue Sushi
+- Forbes Avenue Subs
+- Tepper Taqueria
+- Tepper Taqueria Express
+- E.a.t. (Evenings At Tepper)
 
-Each location has realistic operating hours based on typical CMU schedules.
+Each location includes actual operating hours for each day of the week, including weekend variations and special Shabbat hours.
 
 ## Claude AI Integration
 

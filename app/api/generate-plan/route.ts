@@ -42,8 +42,8 @@ Output ONLY valid JSON (no markdown, no explanations) as an array of objects wit
   {
     "id": "unique-id",
     "type": "meal" | "workout",
-    "title": "Breakfast at Resnik" or "Upper Body Workout",
-    "location": "Resnik Cafe" or "Gym",
+    "title": "Breakfast at Entropy+" or "Upper Body Workout",
+    "location": "Entropy+" or "Gym",
     "start": "ISO 8601 timestamp",
     "end": "ISO 8601 timestamp"
   }

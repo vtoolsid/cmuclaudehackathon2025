@@ -47,7 +47,7 @@ cmuclaudehackathon2025/
 │   ├── NutritionModal.tsx           ✅ Nutrition preferences UI
 │   └── SchedulePreview.tsx          ✅ Weekly schedule display
 ├── lib/
-│   ├── diningData.ts                ✅ 8 CMU dining locations
+│   ├── diningData.ts                ✅ 36 CMU dining locations
 │   └── types.ts                     ✅ TypeScript interfaces
 ├── utils/
 │   ├── icsGenerator.ts              ✅ ICS export functionality
@@ -129,17 +129,20 @@ Claude generates schedules that:
 
 ## CMU-Specific Data
 
-### Dining Locations (8 total)
-1. Resnik Cafe
-2. Entropy+
-3. Cohon University Center
-4. The Exchange
-5. Tepper Cafe
-6. The Underground
-7. Maggie Murph Cafe
-8. Rothberg's Roasters II
+### Dining Locations (36 total)
 
-Each with realistic operating hours for weekdays/weekends.
+All CMU campus dining locations with official operating hours from CMU Eats, including:
+- Stephanie's - Market C (24/7)
+- Entropy+
+- The Exchange
+- Au Bon Pain At Skibo Café
+- Stack'd Underground
+- Scotty's Market By Salem's
+- Rohr Commons - Tepper Eatery
+- Taste Of India
+- And 28 more locations...
+
+Each with accurate operating hours for each day of the week, including weekend variations and special hours (e.g., Shabbat closures on Friday/Saturday).
 
 ## User Flow (As Implemented)
 
@@ -274,7 +277,7 @@ Before demo/deployment:
 
 ## Known Limitations
 
-1. **Static dining hours** - Not fetching real-time from CMU Eats
+1. **Static dining hours** - Uses accurate CMU Eats data, but not fetching in real-time
 2. **No multi-week planning** - Single week schedules only
 3. **No manual editing** - Can't tweak individual blocks
 4. **No user accounts** - Settings not saved between sessions
