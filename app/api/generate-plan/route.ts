@@ -32,16 +32,25 @@ CRITICAL MEAL TIME REQUIREMENTS:
 - Dinner MUST be scheduled between 6:00 PM - 8:00 PM
 These are the preferredMealTimes in the data. DO NOT schedule meals outside these windows.
 
+DIETARY & NUTRITION REQUIREMENTS:
+- Each dining location has a "description" field detailing what they serve
+- Use these descriptions to match restaurants with the student's dietary restrictions, allergies, and nutrition goals
+- For example, if student is vegetarian, prioritize restaurants with vegetarian options in their description
+- If student has allergies, AVOID restaurants that serve those allergens based on descriptions
+- Match nutrition goals (high protein, low carb, etc.) with appropriate restaurant offerings
+
 Your job is to return a 7-day plan that:
 1. **STRICTLY schedules meals within the specified preferredMealTimes windows** - this is non-negotiable
-2. Places meals only in free windows when at least one acceptable dining location is open
-3. Avoids any no-go dining locations
-4. Schedules workouts in free windows, respecting facility hours and target muscles
-5. Spreads workouts throughout the week appropriately (workoutsPerWeek)
-6. Ensures meals and workouts don't overlap with classes
-7. Each meal should last 45-60 minutes
-8. Each workout should last 60-90 minutes
-9. Choose dining locations from the student's favorite list when possible
+2. **Uses restaurant descriptions to match dietary restrictions, allergies, and nutrition goals**
+3. Places meals only in free windows when at least one acceptable dining location is open
+4. Avoids any no-go dining locations
+5. Schedules workouts in free windows, respecting facility hours and target muscles
+6. Spreads workouts throughout the week appropriately (workoutsPerWeek)
+7. Ensures meals and workouts don't overlap with classes
+8. Each meal should last 45-60 minutes
+9. Each workout should last 60-90 minutes
+10. Choose dining locations from the student's favorite list when possible
+11. In the metadata field for meals, include the restaurant's description
 
 Output ONLY valid JSON (no markdown, no explanations) as an array of objects with this exact format:
 [
@@ -51,7 +60,11 @@ Output ONLY valid JSON (no markdown, no explanations) as an array of objects wit
     "title": "Breakfast at Entropy+" or "Upper Body Workout",
     "location": "Entropy+" or "Gym",
     "start": "ISO 8601 timestamp",
-    "end": "ISO 8601 timestamp"
+    "end": "ISO 8601 timestamp",
+    "metadata": {
+      "description": "Restaurant description from the dining locations list (for meals only)",
+      "mealType": "Breakfast" | "Lunch" | "Dinner" (for meals only)
+    }
   }
 ]`;
 
@@ -79,6 +92,13 @@ IMPORTANT: The preferredMealTimes specify EXACT windows for meals:
 - ${userData.nutritionPreferences.preferredMealTimes[2]?.label || 'Dinner'}: ${userData.nutritionPreferences.preferredMealTimes[2]?.startHour}:00 - ${userData.nutritionPreferences.preferredMealTimes[2]?.endHour}:00
 
 Schedule meals ONLY within these time windows. Do NOT schedule dinner at 2-3 PM or any other incorrect time.
+
+DIETARY REQUIREMENTS:
+${userData.nutritionPreferences.dietaryRestrictions?.length ? `- Dietary Restrictions: ${userData.nutritionPreferences.dietaryRestrictions.join(', ')}` : '- No dietary restrictions'}
+${userData.nutritionPreferences.allergies?.length ? `- Allergies: ${userData.nutritionPreferences.allergies.join(', ')} - MUST AVOID these allergens` : '- No allergies'}
+${userData.nutritionPreferences.nutritionGoals?.length ? `- Nutrition Goals: ${userData.nutritionPreferences.nutritionGoals.join(', ')}` : '- No specific nutrition goals'}
+
+When selecting restaurants, carefully read their descriptions and match them with the dietary requirements above.
 
 FITNESS PREFERENCES:
 ${JSON.stringify(userData.fitnessPreferences, null, 2)}

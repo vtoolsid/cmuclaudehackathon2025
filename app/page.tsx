@@ -127,7 +127,7 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-5xl font-bold text-slate-900 mb-3 tracking-tight">CMU Fuel Planner</h1>
+          <h1 className="text-5xl font-bold text-slate-900 mb-3 tracking-tight">TartanTempo</h1>
           <p className="text-lg text-slate-600">Optimize your meals and workouts around your class schedule</p>
         </motion.header>
 

@@ -3,7 +3,8 @@
 import { motion } from 'framer-motion';
 import { ClassBlock, MealOrWorkoutBlock } from '@/lib/types';
 import { Card } from '@/components/ui/card';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import EventDetailModal from '@/components/EventDetailModal';
 
 interface WeeklyCalendarViewProps {
   classBlocks: ClassBlock[];
@@ -25,6 +26,21 @@ interface CalendarEvent {
 export default function WeeklyCalendarView({ classBlocks, mealWorkoutBlocks }: WeeklyCalendarViewProps) {
   const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const hours = Array.from({ length: 24 }, (_, i) => i);
+  const [selectedEvent, setSelectedEvent] = useState<MealOrWorkoutBlock | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleEventClick = (eventId: string) => {
+    const event = mealWorkoutBlocks.find(e => e.id === eventId);
+    if (event) {
+      setSelectedEvent(event);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedEvent(null), 300); // Clear after animation
+  };
 
   const events = useMemo(() => {
     const allEvents: CalendarEvent[] = [];
@@ -129,6 +145,7 @@ export default function WeeklyCalendarView({ classBlocks, mealWorkoutBlocks }: W
   }
 
   return (
+    <>
     <Card className="overflow-hidden">
       <div className="bg-white">
         {/* Calendar Title */}
@@ -199,13 +216,18 @@ export default function WeeklyCalendarView({ classBlocks, mealWorkoutBlocks }: W
                       const style = getEventStyle(event);
                       const isShortEvent = event.duration < 0.75; // Less than 45 minutes
                       
+                      // Only allow clicking on meal/workout blocks, not classes
+                      const isClickable = dayEvents.find(e => e.id === event.id) && 
+                                         mealWorkoutBlocks.some(mw => mw.id === event.id);
+                      
                       return (
                         <motion.div
                           key={event.id}
                           initial={{ opacity: 0, scale: 0.95 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ duration: 0.2 }}
-                          className={`absolute left-1 right-1 rounded-lg border-l-4 shadow-md overflow-visible pointer-events-auto cursor-pointer ${getEventColor(event.type)} group`}
+                          onClick={() => isClickable && handleEventClick(event.id)}
+                          className={`absolute left-1 right-1 rounded-lg border-l-4 shadow-md overflow-visible pointer-events-auto ${isClickable ? 'cursor-pointer' : 'cursor-default'} ${getEventColor(event.type)} group`}
                           style={style}
                         >
                           <div className="p-2.5 h-full overflow-hidden flex flex-col relative">
@@ -266,6 +288,13 @@ export default function WeeklyCalendarView({ classBlocks, mealWorkoutBlocks }: W
         </div>
       </div>
     </Card>
+
+    <EventDetailModal 
+      isOpen={isModalOpen}
+      onClose={handleCloseModal}
+      event={selectedEvent}
+    />
+    </>
   );
 }
 

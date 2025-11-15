@@ -1,4 +1,4 @@
-# 🎓 TartanTaste
+# 🎓 TartanTempo
 
 A smart scheduling application for CMU students that uses Claude AI to optimize meal and workout times around class schedules.
 
