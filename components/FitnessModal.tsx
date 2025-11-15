@@ -2,6 +2,11 @@
 
 import { useState } from 'react';
 import { FitnessPreferences } from '@/lib/types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { MultiSelect } from '@/components/ui/multi-select';
 
 interface FitnessModalProps {
   isOpen: boolean;
@@ -10,20 +15,44 @@ interface FitnessModalProps {
   initialPreferences?: FitnessPreferences;
 }
 
+const ACTIVITY_OPTIONS = [
+  'Weightlifting',
+  'Cardio',
+  'Running',
+  'Swimming',
+  'Yoga',
+  'Pilates',
+  'Cycling',
+  'Basketball',
+  'Soccer',
+  'Intramurals',
+  'Rock Climbing',
+  'Dance',
+];
+
+const MUSCLE_GROUPS = [
+  'Chest',
+  'Back',
+  'Shoulders',
+  'Arms',
+  'Legs',
+  'Core',
+  'Glutes',
+  'Calves',
+];
+
 export default function FitnessModal({ isOpen, onClose, onSave, initialPreferences }: FitnessModalProps) {
   const [workoutsPerWeek, setWorkoutsPerWeek] = useState(initialPreferences?.workoutsPerWeek || 3);
-  const [activityTypes, setActivityTypes] = useState(initialPreferences?.activityTypes.join(', ') || '');
+  const [activityTypes, setActivityTypes] = useState<string[]>(initialPreferences?.activityTypes || []);
   const [workoutSplit, setWorkoutSplit] = useState(initialPreferences?.workoutSplit || '');
-  const [targetMuscles, setTargetMuscles] = useState(initialPreferences?.targetMuscles?.join(', ') || '');
-
-  if (!isOpen) return null;
+  const [targetMuscles, setTargetMuscles] = useState<string[]>(initialPreferences?.targetMuscles || []);
 
   const handleSave = () => {
     const preferences: FitnessPreferences = {
       workoutsPerWeek,
-      activityTypes: activityTypes.split(',').map(s => s.trim()).filter(Boolean),
+      activityTypes,
       workoutSplit: workoutSplit || undefined,
-      targetMuscles: targetMuscles.split(',').map(s => s.trim()).filter(Boolean),
+      targetMuscles,
       facilitiesOpenWindows: [
         // Default CMU gym hours
         { day: 'Monday', startHour: 6, endHour: 23 },
@@ -40,92 +69,87 @@ export default function FitnessModal({ isOpen, onClose, onSave, initialPreferenc
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <h2 className="text-2xl font-bold mb-4 text-gray-800">Fitness Goals</h2>
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[500px]">
+        <DialogHeader>
+          <DialogTitle>Fitness Goals</DialogTitle>
+          <DialogDescription>
+            Configure your workout preferences and activity types
+          </DialogDescription>
+        </DialogHeader>
         
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Workouts Per Week
-            </label>
-            <input
+        <div className="space-y-5 py-4">
+          <div className="space-y-2">
+            <Label htmlFor="workouts-per-week">Workouts Per Week</Label>
+            <Input
+              id="workouts-per-week"
               type="number"
               min="0"
               max="7"
               value={workoutsPerWeek}
               onChange={(e) => setWorkoutsPerWeek(parseInt(e.target.value) || 0)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Activity Types
-            </label>
-            <p className="text-xs text-gray-500 mb-1">Comma-separated (e.g., lifting, cardio, yoga)</p>
-            <textarea
+          <div className="space-y-2">
+            <Label>Activity Types</Label>
+            <p className="text-xs text-slate-500">Select your preferred workout activities</p>
+            <MultiSelect
+              options={ACTIVITY_OPTIONS}
               value={activityTypes}
-              onChange={(e) => setActivityTypes(e.target.value)}
-              rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-              placeholder="lifting, cardio, intramurals"
+              onChange={setActivityTypes}
+              placeholder="Select activity types..."
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Workout Split (Optional)
-            </label>
-            <p className="text-xs text-gray-500 mb-1">e.g., Push/Pull/Legs, Upper/Lower</p>
-            <input
+          <div className="space-y-2">
+            <Label htmlFor="workout-split">Workout Split (Optional)</Label>
+            <p className="text-xs text-slate-500">e.g., Push/Pull/Legs, Upper/Lower</p>
+            <Input
+              id="workout-split"
               type="text"
               value={workoutSplit}
               onChange={(e) => setWorkoutSplit(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
               placeholder="Push/Pull/Legs"
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Target Muscles (Optional)
-            </label>
-            <p className="text-xs text-gray-500 mb-1">Comma-separated muscle groups</p>
-            <textarea
+          <div className="space-y-2">
+            <Label>Target Muscle Groups (Optional)</Label>
+            <p className="text-xs text-slate-500">Select muscle groups to focus on</p>
+            <MultiSelect
+              options={MUSCLE_GROUPS}
               value={targetMuscles}
-              onChange={(e) => setTargetMuscles(e.target.value)}
-              rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800"
-              placeholder="chest, back, legs, shoulders"
+              onChange={setTargetMuscles}
+              placeholder="Select muscle groups..."
             />
           </div>
 
-          <div className="bg-green-50 p-3 rounded-md text-sm text-gray-700">
-            <p className="font-medium mb-1">CMU Gym Hours:</p>
-            <ul className="list-disc list-inside space-y-1 text-xs">
-              <li>Mon-Fri: 6:00 AM - 11:00 PM</li>
-              <li>Sat-Sun: 8:00 AM - 9:00 PM</li>
+          <div className="bg-slate-50 p-4 rounded-md text-sm border border-slate-200">
+            <p className="font-medium text-slate-900 mb-2">CMU Gym Hours</p>
+            <ul className="space-y-1.5 text-xs text-slate-600">
+              <li className="flex justify-between">
+                <span>Monday - Friday</span>
+                <span className="text-slate-500">6:00 AM - 11:00 PM</span>
+              </li>
+              <li className="flex justify-between">
+                <span>Saturday - Sunday</span>
+                <span className="text-slate-500">8:00 AM - 9:00 PM</span>
+              </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-6 flex gap-3">
-          <button
-            onClick={onClose}
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition"
-          >
+        <div className="flex gap-3">
+          <Button variant="outline" onClick={onClose} className="flex-1">
             Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            className="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
-          >
-            Save
-          </button>
+          </Button>
+          <Button variant="success" onClick={handleSave} className="flex-1">
+            Save Preferences
+          </Button>
         </div>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 }
 
