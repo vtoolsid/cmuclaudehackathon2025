@@ -29,6 +29,9 @@ export type NutritionPreferences = {
   preferredMealTimes: PreferredMealTime[];
   favoriteDiningOptions: string[];
   noGoDiningOptions: string[];
+  dietaryRestrictions: string[]; // e.g., "vegetarian", "vegan", "halal", "kosher"
+  allergies: string[]; // e.g., "peanuts", "dairy", "gluten", "shellfish"
+  nutritionGoals: string[]; // e.g., "high protein", "low carb", "balanced"
 };
 
 export type FitnessPreferences = {
@@ -41,6 +44,7 @@ export type FitnessPreferences = {
 
 export type DiningLocation = {
   name: string;
+  description: string;
   isOnCampus: boolean;
   noGo: boolean;
   openWindows: { day: string; startHour: number; endHour: number }[];
