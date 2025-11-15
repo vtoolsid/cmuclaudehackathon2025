@@ -26,16 +26,22 @@ export async function POST(request: NextRequest) {
 - The student's nutrition preferences (meals per day, preferred times, favorites, no-go locations)
 - The student's fitness preferences (workouts per week, activity types, muscle splits, facility hours)
 
+CRITICAL MEAL TIME REQUIREMENTS:
+- Breakfast MUST be scheduled between 8:00 AM - 10:00 AM
+- Lunch MUST be scheduled between 12:00 PM - 2:00 PM  
+- Dinner MUST be scheduled between 6:00 PM - 8:00 PM
+These are the preferredMealTimes in the data. DO NOT schedule meals outside these windows.
+
 Your job is to return a 7-day plan that:
-1. Places meals only in free windows when at least one acceptable dining location is open
-2. Respects mealsPerDay and preferredMealTimes as much as possible
-3. Schedules workouts in free windows, respecting facility hours and target muscles
-4. Avoids any no-go dining locations
-5. Schedules meals at reasonable times (not too early/late unless preferences allow)
-6. Spreads workouts throughout the week appropriately
-7. Ensures meals and workouts don't overlap with classes
-8. Each meal should last 45-60 minutes
-9. Each workout should last 60-90 minutes
+1. **STRICTLY schedules meals within the specified preferredMealTimes windows** - this is non-negotiable
+2. Places meals only in free windows when at least one acceptable dining location is open
+3. Avoids any no-go dining locations
+4. Schedules workouts in free windows, respecting facility hours and target muscles
+5. Spreads workouts throughout the week appropriately (workoutsPerWeek)
+6. Ensures meals and workouts don't overlap with classes
+7. Each meal should last 45-60 minutes
+8. Each workout should last 60-90 minutes
+9. Choose dining locations from the student's favorite list when possible
 
 Output ONLY valid JSON (no markdown, no explanations) as an array of objects with this exact format:
 [
@@ -58,19 +64,26 @@ Output ONLY valid JSON (no markdown, no explanations) as an array of objects wit
 
     const userMessage = `Please generate a weekly meal and workout schedule based on this data:
 
-CLASS SCHEDULE:
+CLASS SCHEDULE (Avoid these times):
 ${JSON.stringify(userData.classBlocks, null, 2)}
 
-DINING LOCATIONS:
+DINING LOCATIONS (With open hours):
 ${JSON.stringify(userData.diningLocations, null, 2)}
 
-NUTRITION PREFERENCES:
+NUTRITION PREFERENCES (MUST follow preferredMealTimes exactly):
 ${JSON.stringify(userData.nutritionPreferences, null, 2)}
+
+IMPORTANT: The preferredMealTimes specify EXACT windows for meals:
+- ${userData.nutritionPreferences.preferredMealTimes[0]?.label || 'Breakfast'}: ${userData.nutritionPreferences.preferredMealTimes[0]?.startHour}:00 - ${userData.nutritionPreferences.preferredMealTimes[0]?.endHour}:00
+- ${userData.nutritionPreferences.preferredMealTimes[1]?.label || 'Lunch'}: ${userData.nutritionPreferences.preferredMealTimes[1]?.startHour}:00 - ${userData.nutritionPreferences.preferredMealTimes[1]?.endHour}:00
+- ${userData.nutritionPreferences.preferredMealTimes[2]?.label || 'Dinner'}: ${userData.nutritionPreferences.preferredMealTimes[2]?.startHour}:00 - ${userData.nutritionPreferences.preferredMealTimes[2]?.endHour}:00
+
+Schedule meals ONLY within these time windows. Do NOT schedule dinner at 2-3 PM or any other incorrect time.
 
 FITNESS PREFERENCES:
 ${JSON.stringify(userData.fitnessPreferences, null, 2)}
 
-Please return ONLY the JSON array of meal and workout blocks.`;
+Generate the schedule for the upcoming week starting from Monday. Return ONLY the JSON array of meal and workout blocks.`;
 
     // Call Claude API
     const message = await anthropic.messages.create({

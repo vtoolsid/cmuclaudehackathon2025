@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import NutritionModal from '@/components/NutritionModal';
 import FitnessModal from '@/components/FitnessModal';
-import SchedulePreview from '@/components/SchedulePreview';
+import WeeklyCalendarView from '@/components/WeeklyCalendarView';
 import { ClassBlock, NutritionPreferences, FitnessPreferences, MealOrWorkoutBlock } from '@/lib/types';
 import { parseICSFile, readICSFile } from '@/utils/icsParser';
 import { generateICSFile, downloadICSFile } from '@/utils/icsGenerator';
@@ -133,23 +133,23 @@ export default function Home() {
 
         {/* Main Content */}
         <motion.div 
-          className="grid grid-cols-1 lg:grid-cols-2 gap-8"
+          className="space-y-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          {/* Left Panel - Configuration */}
-          <div className="space-y-6">
+          {/* Configuration Panel - Horizontal Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Step 1: Import Schedule */}
             <motion.div variants={itemVariants}>
-              <Card className="hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <CardTitle>Step 1: Import Academic Schedule</CardTitle>
-                  <CardDescription>
-                    Upload your .ics calendar file from SIO or your schedule tool
+              <Card className="hover:shadow-lg transition-shadow duration-300 h-full">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Step 1: Import Schedule</CardTitle>
+                  <CardDescription className="text-xs">
+                    Upload your .ics file
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-0">
                   <input
                     type="file"
                     accept=".ics"
@@ -175,38 +175,26 @@ export default function Home() {
 
             {/* Step 2: Nutrition Goals */}
             <motion.div variants={itemVariants}>
-              <Card className="hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <CardTitle>Step 2: Set Nutrition Goals</CardTitle>
-                  <CardDescription>
-                    Configure your meal preferences and dining options
+              <Card className="hover:shadow-lg transition-shadow duration-300 h-full">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Step 2: Nutrition</CardTitle>
+                  <CardDescription className="text-xs">
+                    Set meal preferences
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-0">
                   {nutritionPreferences ? (
                     <motion.div 
-                      className="space-y-3 mb-4 p-4 bg-slate-50 rounded-md border border-slate-200"
+                      className="space-y-2 mb-3 p-3 bg-emerald-50 rounded-md border border-emerald-200"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <div className="text-sm text-slate-700">
-                        <span className="font-semibold">Meals per day:</span> {nutritionPreferences.mealsPerDay}
+                      <div className="text-xs text-emerald-900 font-medium">
+                        ✓ {nutritionPreferences.mealsPerDay} meals/day configured
                       </div>
-                      {nutritionPreferences.favoriteDiningOptions.length > 0 && (
-                        <div className="text-sm text-slate-700">
-                          <span className="font-semibold">Favorites:</span>{' '}
-                          {nutritionPreferences.favoriteDiningOptions.join(', ')}
-                        </div>
-                      )}
-                      {nutritionPreferences.noGoDiningOptions.length > 0 && (
-                        <div className="text-sm text-slate-700">
-                          <span className="font-semibold">Avoid:</span>{' '}
-                          {nutritionPreferences.noGoDiningOptions.join(', ')}
-                        </div>
-                      )}
                     </motion.div>
                   ) : (
-                    <p className="text-sm text-slate-500 mb-4">No preferences set yet</p>
+                    <p className="text-xs text-slate-500 mb-3">Not configured</p>
                   )}
                   
                   <Button
@@ -222,37 +210,26 @@ export default function Home() {
 
             {/* Step 3: Fitness Goals */}
             <motion.div variants={itemVariants}>
-              <Card className="hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <CardTitle>Step 3: Set Fitness Goals</CardTitle>
-                  <CardDescription>
-                    Configure your workout schedule and activity preferences
+              <Card className="hover:shadow-lg transition-shadow duration-300 h-full">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Step 3: Fitness</CardTitle>
+                  <CardDescription className="text-xs">
+                    Set workout preferences
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-0">
                   {fitnessPreferences ? (
                     <motion.div 
-                      className="space-y-3 mb-4 p-4 bg-slate-50 rounded-md border border-slate-200"
+                      className="space-y-2 mb-3 p-3 bg-emerald-50 rounded-md border border-emerald-200"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                     >
-                      <div className="text-sm text-slate-700">
-                        <span className="font-semibold">Workouts per week:</span> {fitnessPreferences.workoutsPerWeek}
+                      <div className="text-xs text-emerald-900 font-medium">
+                        ✓ {fitnessPreferences.workoutsPerWeek} workouts/week configured
                       </div>
-                      {fitnessPreferences.activityTypes.length > 0 && (
-                        <div className="text-sm text-slate-700">
-                          <span className="font-semibold">Activities:</span>{' '}
-                          {fitnessPreferences.activityTypes.join(', ')}
-                        </div>
-                      )}
-                      {fitnessPreferences.workoutSplit && (
-                        <div className="text-sm text-slate-700">
-                          <span className="font-semibold">Split:</span> {fitnessPreferences.workoutSplit}
-                        </div>
-                      )}
                     </motion.div>
                   ) : (
-                    <p className="text-sm text-slate-500 mb-4">No preferences set yet</p>
+                    <p className="text-xs text-slate-500 mb-3">Not configured</p>
                   )}
                   
                   <Button
@@ -268,21 +245,22 @@ export default function Home() {
 
             {/* Step 4: Generate Plan */}
             <motion.div variants={itemVariants}>
-              <Card className="hover:shadow-lg transition-shadow duration-300">
-                <CardHeader>
-                  <CardTitle>Step 4: Generate Your Plan</CardTitle>
-                  <CardDescription>
-                    AI-powered schedule optimization with Claude
+              <Card className="hover:shadow-lg transition-shadow duration-300 h-full">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Step 4: Generate</CardTitle>
+                  <CardDescription className="text-xs">
+                    Create your plan
                   </CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent className="pt-0 space-y-3">
                   <Button
                     onClick={handleGeneratePlan}
                     disabled={isLoading || !nutritionPreferences || !fitnessPreferences || classBlocks.length === 0}
-                    className="w-full"
+                    className="w-full text-sm"
                     variant="default"
+                    size="lg"
                   >
-                    {isLoading ? 'Generating with Claude AI...' : 'Generate Plan with Claude'}
+                    {isLoading ? 'Generating...' : 'Generate Plan'}
                   </Button>
 
                   {mealWorkoutBlocks.length > 0 && (
@@ -294,9 +272,9 @@ export default function Home() {
                       <Button
                         onClick={handleExportICS}
                         variant="outline"
-                        className="w-full"
+                        className="w-full text-sm"
                       >
-                        Export as .ics File
+                        Export .ics
                       </Button>
                     </motion.div>
                   )}
@@ -304,21 +282,25 @@ export default function Home() {
               </Card>
             </motion.div>
 
-            {/* Error Display */}
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-red-50 border border-red-200 rounded-lg p-4"
-              >
-                <p className="text-sm text-red-800 font-medium">{error}</p>
-              </motion.div>
-            )}
           </div>
 
-          {/* Right Panel - Schedule Preview */}
-          <motion.div variants={itemVariants}>
-            <SchedulePreview classBlocks={classBlocks} mealWorkoutBlocks={mealWorkoutBlocks} />
+          {/* Error Display */}
+          {error && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-50 border border-red-200 rounded-lg p-4"
+            >
+              <p className="text-sm text-red-800 font-medium">{error}</p>
+            </motion.div>
+          )}
+
+          {/* Full-Width Weekly Calendar */}
+          <motion.div 
+            variants={itemVariants}
+            className="w-full"
+          >
+            <WeeklyCalendarView classBlocks={classBlocks} mealWorkoutBlocks={mealWorkoutBlocks} />
           </motion.div>
         </motion.div>
 

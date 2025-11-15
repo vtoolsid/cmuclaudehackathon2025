@@ -17,9 +17,9 @@ interface NutritionModalProps {
 }
 
 const DEFAULT_MEAL_TIMES = [
-  { label: 'Breakfast', startHour: 8, endHour: 10 },
-  { label: 'Lunch', startHour: 12, endHour: 14 },
-  { label: 'Dinner', startHour: 18, endHour: 20 },
+  { label: 'Breakfast', startHour: 8, endHour: 10 },   // 8:00 AM - 10:00 AM
+  { label: 'Lunch', startHour: 12, endHour: 14 },      // 12:00 PM - 2:00 PM
+  { label: 'Dinner', startHour: 18, endHour: 20 },     // 6:00 PM - 8:00 PM
 ];
 
 const DINING_OPTIONS = CMU_DINING_LOCATIONS.map(loc => loc.name);
